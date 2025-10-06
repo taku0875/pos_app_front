@@ -1,0 +1,46 @@
+name: deploy-next-to-azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_ENDPOINT: ${{ secrets.NEXT_PUBLIC_API_ENDPOINT }}
+        run: npm run build
+
+      - name: Prepare standalone output
+        run: |
+          mkdir -p .next/standalone/.next
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+
+      - name: Preflight secret
+        run: |
+          if [ -z "${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ADF3B27120A9474B879AD4FEC07F374A }}" ]; then
+            echo "Publish profile secret missing or not accessible"; exit 1; fi
+
+      - name: Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: app-002-gen10-step3-2-node-oshima3
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ADF3B27120A9474B879AD4FEC07F374A }}
+          package: ./.next/standalone
+
