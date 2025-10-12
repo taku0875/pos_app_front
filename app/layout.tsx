@@ -1,12 +1,10 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import ClientLayout from "./client-layout"; // ✅ ← "./" に修正
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "POSアプリ",
   description: "スマホで使える簡易POSシステム",
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -16,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <ClientLayout>{children}</ClientLayout>
+      </body>
     </html>
   );
 }
