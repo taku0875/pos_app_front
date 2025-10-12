@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start"
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start -p $PORT"
   },
   "dependencies": {
     "next": "15.5.4",
@@ -16,8 +16,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "24.7.2",
-    "@types/react": "19.2.2",
     "tailwindcss": "^4",
     "typescript": "5.9.3"
   }
