@@ -8,7 +8,7 @@ const hostname = '0.0.0.0';
 const port = process.env.PORT || 8080;
 
 // Next.jsアプリを初期化
-const app = next({ dev, hostname, port });
+const app = next({ dev, hostname, port,dir: './frontend' });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
