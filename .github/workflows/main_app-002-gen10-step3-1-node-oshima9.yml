@@ -3,6 +3,7 @@
 
 name: Build and deploy Node.js app to Azure Web App - app-002-gen10-step3-1-node-oshima9
 
+
 on:
   push:
     branches:
@@ -52,4 +53,5 @@ jobs:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           slot-name: 'Production'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
