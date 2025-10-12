@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start -p $PORT"
+    "start": "node server.js"
   },
   "dependencies": {
     "next": "15.5.4",
