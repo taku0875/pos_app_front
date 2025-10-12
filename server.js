@@ -8,7 +8,7 @@ const hostname = "0.0.0.0";
 const port = process.env.PORT || 8080;
 
 // 👇 frontendフォルダをNext.jsのディレクトリとして指定
-const app = next({ dev, hostname, port, dir: "./frontend" });
+const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {

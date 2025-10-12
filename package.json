@@ -1,13 +1,24 @@
 {
-  "name": "pos-root",
-  "version": "1.0.0",
+  "name": "pos-frontend",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
     "start": "node server.js"
   },
   "dependencies": {
     "next": "15.5.4",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-webcam": "^7.2.0",
+    "react-zxing": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4"
   }
 }
