@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "POSアプリ",
   description: "スマホで使える簡易POSシステム",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -13,9 +16,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <head>
-        <title>POSアプリ</title> {/* ← これを強制的に上書き */}
-      </head>
       <body>{children}</body>
     </html>
   );
