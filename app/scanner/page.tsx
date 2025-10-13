@@ -1,20 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import BarcodeScanner from "@/components/BarcodeScanner";
+import BarcodeScanner from "./components/BarcodeScanner"; // 👈 パスを修正
 
 export default function ScannerPage() {
   const router = useRouter();
 
-  /**
-   * バーコードのスキャンが成功したときに呼び出される関数
-   * @param result - スキャンされたバーコードの文字列
-   */
   const handleScanSuccess = (result: string) => {
-    // スキャン結果をブラウザのローカルストレージに保存
     localStorage.setItem("scannedCode", result);
-    // トップページ (レジ画面) に戻る
-    router.push("/");
+    router.push("/"); // スキャン成功後、トップページに戻る
   };
 
   return <BarcodeScanner onScanSuccess={handleScanSuccess} />;
