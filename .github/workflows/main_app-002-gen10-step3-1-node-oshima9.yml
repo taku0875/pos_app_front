@@ -35,8 +35,8 @@ jobs:
           cp -r ./.next/static ./deploy/.next/static
           cp -r ./public ./deploy/public
           cp ./package.json ./deploy/
-          cp ./frontend/server.js ./deploy/
-          cp ./frontend/next.config.mjs ./deploy/
+          cp ./server.js ./deploy/
+          cp ./next.config.mjs ./deploy/
 
       - name: Zip artifact for deployment
         run: zip -r release.zip ./deploy
@@ -47,7 +47,6 @@ jobs:
           name: node-app
           path: release.zip
 
-  # 👇 このdeployジョブは「jobs:」の直下にある
   deploy:
     runs-on: ubuntu-latest
     needs: build
