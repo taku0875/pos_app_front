@@ -7,13 +7,11 @@ interface BarcodeScannerProps {
   onScanSuccess: (result: string) => void;
 }
 
+// 👇 export default を使ってコンポーネントを公開する
 export default function BarcodeScanner({ onScanSuccess }: BarcodeScannerProps) {
   const { ref } = useZxing({
     onDecodeResult(result) {
       onScanSuccess(result.getText());
-    },
-    onDecodeError(error) {
-      console.warn("スキャン失敗:", error);
     },
   });
 

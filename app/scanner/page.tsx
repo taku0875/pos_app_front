@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import BarcodeScanner from "../../components/BarcodeScanner";
+import BarcodeScanner from "@/components/BarcodeScanner"; // 👈 パスをこちらに修正
 
 export default function ScannerPage() {
   const router = useRouter();
