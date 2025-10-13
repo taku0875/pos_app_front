@@ -30,22 +30,17 @@ jobs:
 
       - name: Prepare deployment package
         run: |
-          mkdir deploy
+          mkdir -p deploy/.next
+          # standaloneフォルダとpublicフォルダ、静的ファイルをコピーするだけでOK
           cp -r ./.next/standalone/. ./deploy
+          cp -r ./public ./deploy
           cp -r ./.next/static ./deploy/.next/static
-          cp -r ./public ./deploy/public
-          cp ./package.json ./deploy/
-          cp ./server.js ./deploy/
-          cp ./next.config.mjs ./deploy/
-
-      - name: Zip artifact for deployment
-        run: zip -r release.zip ./deploy
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: ./deploy
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,14 +55,11 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           slot-name: 'Production'
-          package: ./deploy
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
