@@ -5,7 +5,7 @@ import next from "next";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "0.0.0.0";
-const port = process.env.PORT || 8080;
+const port = process.env.WEBSITE_PORT || process.env.PORT || 3000;
 
 // 👇 frontendフォルダをNext.jsのディレクトリとして指定
 const app = next({ dev, hostname, port });

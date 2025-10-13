@@ -35,7 +35,8 @@ jobs:
           cp -r ./.next/standalone/. ./deploy
           cp -r ./public ./deploy
           cp -r ./.next/static ./deploy/.next/static
-      
+          cp -r ./node_modules ./deploy/node_modules
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
