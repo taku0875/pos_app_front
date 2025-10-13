@@ -1,102 +1,95 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import CartList from "./components/CartList";
-import ProductInfo from "./components/ProductInfo";
+import CartList from "../components/CartList";
+import ProductInfo from "../components/ProductInfo";
 
-export default function Page() {
+// カート内の商品の型定義
+interface CartItem {
+  product_id: number;
+  product_code: string;
+  name: string;
+  price: number;
+  tax_code: string;
+  qty: number;
+}
+
+export default function Home() {
   const [barcode, setBarcode] = useState("");
-  const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState<number | null>(null);
-  const [cart, setCart] = useState<{ name: string; price: number; qty: number }[]>([]);
-
-  // ✅ スキャナーから戻ったときに localStorage のスキャン結果を取得
+  const [product, setProduct] = useState<{ name: string; price: number } | null>(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  
+  // スキャナーページから戻ったときに商品情報を取得・追加する
   useEffect(() => {
     const scannedCode = localStorage.getItem("scannedCode");
     if (scannedCode) {
-      setBarcode(scannedCode);
-      fetchProduct(scannedCode);
-      localStorage.removeItem("scannedCode"); // 一度反映したら削除
+      localStorage.removeItem("scannedCode");
+      fetchAndAddToCart(scannedCode);
     }
   }, []);
 
-  // ✅ 商品情報取得（登録されていない場合はエラー処理）
-  const fetchProduct = async (code: string) => {
+  const fetchAndAddToCart = async (code: string) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/search?code=${code}`);
+      if (!res.ok) throw new Error("Product not found");
 
-      if (!res.ok) {
-        if (res.status === 404) {
-          alert("登録されていない商品です。");
-          setProductName("");
-          setPrice(null);
-          return;
+      const productData = await res.json();
+      setBarcode(code);
+      setProduct({ name: productData.name, price: productData.price });
+
+      // カートに追加
+      const newItem: CartItem = {
+        product_id: productData.prd_id,
+        product_code: productData.code,
+        name: productData.name,
+        price: productData.price,
+        tax_code: "10", // 税コードを仮定
+        qty: 1,
+      };
+
+      setCart((prevCart) => {
+        const existingItem = prevCart.find(item => item.product_id === newItem.product_id);
+        if (existingItem) {
+          return prevCart.map(item =>
+            item.product_id === newItem.product_id ? { ...item, qty: item.qty + 1 } : item
+          );
         }
-        throw new Error("サーバーエラーが発生しました。");
-      }
-
-      const data = await res.json();
-      setProductName(data.name);
-      setPrice(data.price);
-    } catch {
-      alert("商品情報を取得できませんでした。");
+        return [...prevCart, newItem];
+      });
+    } catch (error) {
+      alert("登録されていない商品か、取得に失敗しました。");
+      setBarcode(code);
+      setProduct(null);
     }
   };
-
-  // カートに追加
-  const handleAdd = () => {
-    if (!productName || !price) return;
-    const existing = cart.find((item) => item.name === productName);
-    if (existing) {
-      setCart(cart.map((item) =>
-        item.name === productName ? { ...item, qty: item.qty + 1 } : item
-      ));
-    } else {
-      setCart([...cart, { name: productName, price, qty: 1 }]);
-    }
-    setBarcode("");
-    setProductName("");
-    setPrice(null);
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
   };
-
-  // 合計金額
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">モバイルPOSアプリ</h1>
+    <main className="flex flex-col items-center justify-start min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">POSレジ</h1>
+          <button onClick={handleLogout} className="text-sm text-blue-600 hover:underline">ログアウト</button>
+        </div>
 
-      {/* スキャン画面へのリンク */}
-      <Link
-        href={`/scanner?prev=home`}
-        className="w-64 py-3 text-center bg-blue-500 text-white rounded-md font-semibold mb-4 hover:bg-blue-600"
-      >
-        スキャン（カメラ）
-      </Link>
+        <ProductInfo code={barcode} name={product?.name || ""} price={product?.price || null} />
 
-      {/* 商品情報表示 */}
-      <ProductInfo code={barcode} name={productName} price={price} />
+        <div className="flex flex-col gap-3 mt-4">
+          <Link href="/scanner" className="w-full bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors text-lg font-semibold text-center">
+            バーコードをスキャン
+          </Link>
+          <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors text-lg font-semibold">
+            会計
+          </button>
+        </div>
 
-      {/* 追加ボタン */}
-      <button
-        onClick={handleAdd}
-        className="w-64 mt-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-        disabled={!productName || !price}
-      >
-        追加
-      </button>
-
-      {/* カート一覧 */}
-      <CartList items={cart} />
-
-      {/* 購入ボタン */}
-      <button
-        onClick={() => alert(`合計金額：${total.toLocaleString()}円（税込）`)}
-        className="w-64 mt-4 py-3 bg-gray-800 text-white rounded-md font-semibold hover:bg-gray-700"
-      >
-        購入
-      </button>
+        <CartList items={cart} />
+      </div>
     </main>
   );
 }

@@ -14,20 +14,19 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(""); // ← 前回のエラーメッセージをリセット
+    setError("");
 
     try {
+      // ログインAPIを呼び出し
       const res = await axios.post(`${API_BASE_URL}/auth/login`, {
         username,
         password,
       });
 
-      console.log("✅ Login response:", res.data);
-
+      // 成功した場合、トークンを保存してトップページへ
       if (res.data.access_token) {
         localStorage.setItem("token", res.data.access_token);
-        alert("ログイン成功");
-        window.location.href = "/"; // ← ホーム画面へ遷移
+        window.location.href = "/";
       } else {
         setError("トークンが返されませんでした。");
       }
@@ -38,12 +37,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <form
         onSubmit={handleLogin}
         className="bg-white shadow-lg p-8 rounded-lg w-80"
       >
-        <h1 className="text-2xl font-bold text-center mb-6">ログイン</h1>
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">ログイン</h1>
 
         <label className="block mb-2 text-gray-700">ユーザー名</label>
         <input
@@ -63,7 +62,7 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white p-2 w-full rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 w-full rounded-lg transition-colors"
         >
           ログイン
         </button>
