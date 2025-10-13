@@ -35,8 +35,8 @@ jobs:
           cp -r ./.next/static ./deploy/.next/static
           cp -r ./public ./deploy/public
           cp ./package.json ./deploy/
-          cp ./server.js ./deploy/
-          cp ./next.config.mjs ./deploy/
+          cp ./frontend/server.js ./deploy/
+          cp ./frontend/next.config.mjs ./deploy/
 
       - name: Zip artifact for deployment
         run: zip -r release.zip ./deploy
