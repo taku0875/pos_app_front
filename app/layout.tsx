@@ -1,5 +1,4 @@
 import "./globals.css";
-import ClientLayout from "./client-layout"; // ✅ ← "./" に修正
 
 export const metadata = {
   title: "POSアプリ",
@@ -15,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        {children}
       </body>
     </html>
   );
