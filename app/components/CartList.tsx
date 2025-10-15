@@ -1,7 +1,18 @@
 "use client";
 
-// ... (interfaceの定義は変更なし) ...
+interface CartItem {
+  product_id: number;
+  name: string;
+  price: number;
+  qty: number;
+}
 
+interface CartListProps {
+  items: CartItem[];
+  onUpdateQty: (productId: number, newQty: number) => void; // 👈 数量更新用の関数を受け取る
+}
+
+const TAX_RATE = 0.1;
 export default function CartList({ items, onUpdateQty }: CartListProps) {
   const TAX_RATE = 0.1;
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
