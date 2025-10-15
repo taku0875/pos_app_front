@@ -85,7 +85,7 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">モバイルPOSアプリ</h1>
+      <h1 className="text-2xl font-bold mb-6">POSアプリ</h1>
 
       <Link
         href="/scanner"

@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - app-002-gen10-step3-1-node-oshima9
+name: Build and deploy Node.js app to Azure Web App
 
 on:
   push:
@@ -31,12 +31,11 @@ jobs:
       - name: Prepare deployment package
         run: |
           mkdir -p deploy/.next
-          # standaloneフォルダとpublicフォルダ、静的ファイルをコピーするだけでOK
           cp -r ./.next/standalone/. ./deploy
           cp -r ./public ./deploy
           cp -r ./.next/static ./deploy/.next/static
-          cp -r ./node_modules ./deploy/node_modules
-          
+          # node_modulesは含めないのがベストプラクティス
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -61,6 +60,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
-          slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
+          # 👇 この行を追加してキャッシュをクリア
+          clean: true
