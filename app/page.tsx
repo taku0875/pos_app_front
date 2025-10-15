@@ -19,7 +19,7 @@ export default function Page() {
   const [barcode, setBarcode] = useState("");
   const [product, setProduct] = useState<{ name: string; price: number } | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [lastScannedId, setLastScannedId] = useState<number | null>(null); // 👈 最後にスキャンした商品IDを記憶
+  const [lastScannedId, setLastScannedId] = useState<number | null>(null);
 
   useEffect(() => {
     const scannedCode = localStorage.getItem("scannedCode");
@@ -33,17 +33,16 @@ export default function Page() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/search?code=${code}`);
       if (!res.ok) {
-        setLastScannedId(null); // 👈 エラー時はリセット
+        setLastScannedId(null);
         throw new Error("Product not found");
       }
 
       const productData = await res.json();
 
-      // 👇 連続スキャンチェック
       if (productData.prd_id === lastScannedId) {
         alert("同じ商品が連続でスキャンされました。");
       }
-      setLastScannedId(productData.prd_id); // 👈 スキャンした商品IDを記憶
+      setLastScannedId(productData.prd_id);
 
       setBarcode(code);
       setProduct({ name: productData.name, price: productData.price });
@@ -71,7 +70,7 @@ export default function Page() {
       alert("登録されていない商品か、取得に失敗しました。");
       setBarcode(code);
       setProduct(null);
-      setLastScannedId(null); // 👈 エラー時はリセット
+      setLastScannedId(null);
     }
   };
   
@@ -84,26 +83,29 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">POSアプリ</h1>
+    <main className="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6">
+      <div className="w-full max-w-sm bg-surface shadow-lg rounded-2xl p-6 space-y-6">
+        <h1 className="text-3xl font-bold text-center text-text-primary">POSアプリ</h1>
 
-      <Link
-        href="/scanner"
-        className="w-full max-w-sm py-3 text-center bg-blue-500 text-white rounded-md font-semibold mb-4 hover:bg-blue-600"
-      >
-        スキャン（カメラ）
-      </Link>
+        <Link
+          href="/scanner"
+          className="w-full flex items-center justify-center py-3 text-center bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary-hover transition-transform transform hover:scale-105"
+        >
+          商品をスキャン
+        </Link>
 
-      <ProductInfo code={barcode} name={product?.name || ""} price={product?.price || null} />
+        <ProductInfo code={barcode} name={product?.name || ""} price={product?.price || null} />
 
-      <CartList items={cart} onUpdateQty={handleUpdateQty} />
+        <CartList items={cart} onUpdateQty={handleUpdateQty} />
 
-      <button
-        onClick={() => alert(`購入処理は未実装です`)}
-        className="w-full max-w-sm mt-4 py-3 bg-gray-800 text-white rounded-md font-semibold hover:bg-gray-700"
-      >
-        購入
-      </button>
+        <button
+          onClick={() => alert(`購入処理は未実装です`)}
+          className="w-full py-3 bg-gray-800 text-white rounded-xl font-semibold text-lg hover:bg-gray-700 transition-transform transform hover:scale-105 disabled:bg-gray-400"
+          disabled={cart.length === 0}
+        >
+          購入する
+        </button>
+      </div>
     </main>
   );
 }
