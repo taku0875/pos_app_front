@@ -9,7 +9,7 @@ const hostname = "0.0.0.0";
 const port = process.env.WEBSITE_PORT || process.env.PORT || 3000;
 
 // Next.jsアプリのインスタンスを作成
-const app = next({ dev, hostname, port });
+const app = next({ dev, hostname, port, dir: '.' });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
