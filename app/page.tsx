@@ -83,27 +83,27 @@ export default function Page() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6">
-      <div className="w-full max-w-sm bg-surface shadow-lg rounded-2xl p-6 space-y-6">
-        <h1 className="text-3xl font-bold text-center text-text-primary">POSアプリ</h1>
+    <main className="min-h-screen bg-sky-100 p-6 flex flex-col items-center">
+      <div className="w-full max-w-sm bg-white shadow-lg rounded-xl p-6 space-y-4">
+        <h1 className="text-2xl font-bold text-center text-gray-800">モバイルPOSアプリ</h1>
 
         <Link
           href="/scanner"
-          className="w-full flex items-center justify-center py-3 text-center bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary-hover transition-transform transform hover:scale-105"
+          className="w-full py-3 text-center bg-sky-500 text-white rounded-md font-semibold hover:bg-sky-600 transition-colors"
         >
-          商品をスキャン
+          スキャン（カメラ）
         </Link>
 
         <ProductInfo code={barcode} name={product?.name || ""} price={product?.price || null} />
-
+        
         <CartList items={cart} onUpdateQty={handleUpdateQty} />
 
         <button
           onClick={() => alert(`購入処理は未実装です`)}
-          className="w-full py-3 bg-gray-800 text-white rounded-xl font-semibold text-lg hover:bg-gray-700 transition-transform transform hover:scale-105 disabled:bg-gray-400"
+          className="w-full py-3 bg-gray-800 text-white rounded-md font-semibold hover:bg-gray-700 disabled:bg-gray-400"
           disabled={cart.length === 0}
         >
-          購入する
+          購入
         </button>
       </div>
     </main>
