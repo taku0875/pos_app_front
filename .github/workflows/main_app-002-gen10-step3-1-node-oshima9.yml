@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: '20.x'
 
+          
       - name: Install dependencies and build Next.js app
         env:
           NEXT_PUBLIC_API_ENDPOINT: ${{ secrets.NEXT_PUBLIC_API_ENDPOINT }}
