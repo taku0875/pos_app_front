@@ -28,7 +28,6 @@ jobs:
           npm install
           npm run build
 
-      # This is the critical step you are missing
       - name: Install production dependencies in standalone directory
         working-directory: ./.next/standalone
         run: npm install --production
@@ -38,7 +37,7 @@ jobs:
         with:
           name: node-app
           path: ./.next/standalone/
-  # ... deploy job remains the same
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
