@@ -1,4 +1,5 @@
 import "./globals.css";
+import { CartProvider } from "./context/CartContext";
 
 export const metadata = {
   title: "POSアプリ",
@@ -8,8 +9,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode; }) {
   return (
     <html lang="ja">
-      {/* ClientLayoutを削除し、body直下にchildrenを配置 */}
-      <body>{children}</body>
+      <body className="bg-sky-100">
+        <CartProvider>
+          {children}
+        </CartProvider>
+      </body>
     </html>
   );
 }

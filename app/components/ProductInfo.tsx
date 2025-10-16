@@ -8,29 +8,31 @@ interface ProductInfoProps {
 
 export default function ProductInfo({ code, name, price }: ProductInfoProps) {
   return (
-    <div className="flex flex-col gap-2 w-64">
+    <div className="flex flex-col gap-2 w-full">
       <input
         type="text"
         placeholder="コード"
         value={code}
         readOnly
-        className="border p-2 rounded-md bg-white"
+        // 👇 背景色を薄いグレーに変更
+        className="border p-2 rounded-md bg-gray-100"
       />
       <input
         type="text"
         placeholder="名称"
         value={name}
         readOnly
-        className="border p-2 rounded-md bg-white"
+        // 👇 背景色を薄いグレーに変更
+        className="border p-2 rounded-md bg-gray-100"
       />
       <input
         type="text"
         placeholder="単価"
         value={price ? `${price}円` : ""}
         readOnly
-        className="border p-2 rounded-md bg-white"
+        // 👇 背景色を薄いグレーに変更
+        className="border p-2 rounded-md bg-gray-100"
       />
     </div>
   );
 }
-
