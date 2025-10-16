@@ -28,13 +28,11 @@ jobs:
           npm install
           npm run build
 
-      # 👇 このステップを追加して、standaloneフォルダ内に本番用のnode_modulesを作成します
+      # 👇 このステップが最も重要です。パッケージを自己完結させます。
       - name: Install production dependencies in standalone directory
         working-directory: ./.next/standalone
         run: npm install --production
 
-      # このステップは変更ありませんが、上記のステップの結果として、
-      # node_modulesを含んだstandaloneフォルダがアップロードされるようになります。
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
