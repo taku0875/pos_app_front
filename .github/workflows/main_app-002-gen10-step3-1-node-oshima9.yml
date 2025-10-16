@@ -34,7 +34,8 @@ jobs:
           cp -r ./.next/standalone/. ./deploy
           cp -r ./public ./deploy
           cp -r ./.next/static ./deploy/.next/static
-          # node_modulesは含めないのがベストプラクティス
+          # 👇 node_modulesをパッケージに含めることで、モジュール不足を完全に解決
+          cp -r ./node_modules ./deploy/node_modules
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -62,5 +63,4 @@ jobs:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
-          # 👇 この行を追加してキャッシュをクリア
           clean: true
