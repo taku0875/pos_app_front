@@ -5,11 +5,11 @@ import next from "next";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "0.0.0.0";
+// Azureの環境変数 `WEBSITE_PORT` を優先的に読み込む設定
 const port = process.env.WEBSITE_PORT || process.env.PORT || 3000;
 
-// 👇 dir: '.' を追加して、カレントディレクトリをプロジェクトルートとして指定します
-// これが今回の問題を解決する唯一の鍵です。
-const app = next({ dev, hostname, port, dir: '.' });
+// Next.jsアプリのインスタンスを作成
+const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
@@ -23,7 +23,8 @@ app.prepare().then(() => {
       res.end("internal server error");
     }
   }).listen(port, () => {
-    // このメッセージがログストリームに表示されれば起動成功です
+    // サーバーが起動したらログを出力
+    // 開発環境では http://localhost:3000 でアクセスできます
     console.log(`🚀 Server ready on http://localhost:${port}`);
   });
 });
