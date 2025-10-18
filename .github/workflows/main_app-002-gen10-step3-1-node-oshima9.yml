@@ -6,7 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,28 +19,25 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '20' # Node 22でもOKだが、安定性重視なら20推奨
 
-          
-      - name: Install dependencies and build Next.js app
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
         env:
-          # 👇 .env.local に合わせてキー名を変更しました
+          NODE_ENV: production
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-        run: |
-          npm install
-          # ▼ 実行権限を付与 ▼
-          chmod +x node_modules/.bin/next
-          npm run build
+        run: npm run build
 
-      - name: Install production dependencies in standalone directory
-        working-directory: ./.next/standalone
-        run: npm install --production
-
-      - name: Upload artifact for deployment job
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: ./.next/standalone/
+          path: |
+            .
+            !node_modules/
+            !.git/
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,7 +47,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
@@ -63,5 +59,3 @@ jobs:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
-
-          clean: true
