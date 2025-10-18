@@ -41,6 +41,7 @@ jobs:
           path: |
             .next/
             .next/server/
+            .next/static/
             node_modules/
             public/
             server.js
