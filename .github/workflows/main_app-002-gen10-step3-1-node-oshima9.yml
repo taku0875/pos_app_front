@@ -24,14 +24,16 @@ jobs:
 
       - name: Install, Build, and Prune
         env:
-          NODE_ENV: production
+          # NODE_ENV: production はここから削除します
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
         run: |
-          # 1. 開発用パッケージも含め、すべての依存関係をインストール
+          # 1. 開発用パッケージも含め、すべての依存関係をインストールします
           npm ci
-          # 2. Next.jsアプリをビルド
+          
+          # 2. ビルドコマンドにだけ NODE_ENV=production を指定して実行します
           NODE_ENV=production npm run build
-          # 3. ビルド後、本番で不要な開発用パッケージをnode_modulesから削除
+          
+          # 3. ビルド後、本番で不要な開発用パッケージをnode_modulesから削除します
           npm prune --production
 
       - name: Upload artifact for deployment
@@ -68,6 +70,6 @@ jobs:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           # ダウンロードしたアーティファクト(node-app)を展開します
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A_A0BAB9B9D7BEDD6FE2F }}
           # デプロイ先に既存のファイルがあれば削除します
           clean: true
