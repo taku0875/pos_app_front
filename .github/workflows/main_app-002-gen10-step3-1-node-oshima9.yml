@@ -30,7 +30,7 @@ jobs:
           # 1. 開発用パッケージも含め、すべての依存関係をインストール
           npm ci
           # 2. Next.jsアプリをビルド
-          npm run build
+          NODE_ENV=production npm run build
           # 3. ビルド後、本番で不要な開発用パッケージをnode_modulesから削除
           npm prune --production
 
