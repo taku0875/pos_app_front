@@ -25,9 +25,12 @@ jobs:
           
       - name: Install dependencies and build Next.js app
         env:
-          NEXT_PUBLIC_API_ENDPOINT: ${{ secrets.NEXT_PUBLIC_API_ENDPOINT }}
+          # 👇 .env.local に合わせてキー名を変更しました
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
         run: |
           npm install
+          # ▼ 実行権限を付与 ▼
+          chmod +x node_modules/.bin/next
           npm run build
 
       - name: Install production dependencies in standalone directory
@@ -62,5 +65,3 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
 
           clean: true
-
-
