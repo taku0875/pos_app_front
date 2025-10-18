@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install, Build, and Prune
+      - name: Install and Build
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
         run: |
@@ -31,8 +31,7 @@ jobs:
           echo "Building Next.js app..."
           NODE_ENV=production npm run build
 
-          echo "Removing dev dependencies..."
-          npm prune --production
+          echo "✅ Build complete."
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -40,8 +39,6 @@ jobs:
           name: node-app
           path: |
             .next/
-            .next/server/
-            .next/static/
             node_modules/
             public/
             server.js
