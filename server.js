@@ -1,30 +1,25 @@
 // server.js
-import { createServer } from "http";
-import { parse } from "url";
-import next from "next";
+const { createServer } = require('http');
+const { parse } = require('url');
+const next = require('next');
 
-const dev = process.env.NODE_ENV !== "production";
-const hostname = "0.0.0.0";
-// Azureの環境変数 `WEBSITE_PORT` を優先的に読み込む設定
-const port = process.env.WEBSITE_PORT || process.env.PORT || 3000;
-
-// Next.jsアプリのインスタンスを作成
-const app = next({ dev, hostname, port });
+// 'production' 以外（開発環境など）かどうかを判定
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
 const handle = app.getRequestHandler();
 
+// Azure App Service は自動的に PORT を設定します。
+// ローカルで .env.local が読み込まれない場合や設定がない場合、フォールバックとして 3000 を使います。
+const port = process.env.PORT || 3000;
+
 app.prepare().then(() => {
-  createServer(async (req, res) => {
-    try {
-      const parsedUrl = parse(req.url, true);
-      await handle(req, res, parsedUrl);
-    } catch (err) {
-      console.error("Server error:", err);
-      res.statusCode = 500;
-      res.end("internal server error");
-    }
-  }).listen(port, () => {
-    // サーバーが起動したらログを出力
-    // 開発環境では http://localhost:3000 でアクセスできます
-    console.log(`🚀 Server ready on http://localhost:${port}`);
+  createServer((req, res) => {
+    // URLをパースしてNext.jsのハンドラに渡す
+    const parsedUrl = parse(req.url, true);
+    handle(req, res, parsedUrl);
+  }).listen(port, (err) => {
+    if (err) throw err;
+    // サーバーが起動したらログに出力
+    console.log(`> Ready on http://localhost:${port}`);
   });
 });
