@@ -64,8 +64,4 @@ jobs:
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
 
-<<<<<<< HEAD
           clean: true
-=======
-          clean: true
->>>>>>> 9da9fb7f0881568f1aad4c142e84ad9a98e7a83d
