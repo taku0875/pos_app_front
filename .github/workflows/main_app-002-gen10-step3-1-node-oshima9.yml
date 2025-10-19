@@ -9,29 +9,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install and Build
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-        run: |
-          echo "Installing dependencies..."
-          npm ci
-          
-          echo "Building Next.js app..."
-          NODE_ENV=production npm run build
+      - name: Install dependencies
+        run: npm ci
 
-          echo "✅ Build complete."
+      - name: Build Next.js app
+        run: npm run build
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -48,9 +40,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    environment:
-      name: production
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download artifact from build job
@@ -63,6 +52,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
-          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
-          clean: true
+          package: .
