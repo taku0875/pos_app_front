@@ -9,7 +9,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 // ✅ Azureではポート8080固定。PORTが未定義でも8080で待機。
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 app.prepare().then(() => {
   createServer((req, res) => {
