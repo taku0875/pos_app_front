@@ -25,7 +25,7 @@ jobs:
       - name: Build Next.js app
         run: npm run build
 
-      # ✅ ここで本番に必要なファイルのみをパッケージ化
+      # ✅ ここで "実体付き" node_modules を含めて artifact 化
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
