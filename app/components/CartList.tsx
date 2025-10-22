@@ -1,21 +1,31 @@
 "use client";
 
+// ★ 1. CartContextから 'CartItem' 型をインポート
+import { CartItem } from "../context/CartContext";
+
+// ★ 2. ローカルの 'CartItem' 型定義を削除
+/*
 interface CartItem {
-  product_id: number;
-  name: string;
-  price: number;
-  qty: number;
+  product_id: number;
+  name: string;
+  price: number;
+  qty: number;
 }
+*/
 
 interface CartListProps {
-  items: CartItem[];
+  items: CartItem[]; // ★ 3. 'items' はインポートした CartItem 型を参照する
   onUpdateQty: (productId: number, newQty: number) => void;
 }
 
 const TAX_RATE = 0.1;
 
 export default function CartList({ items, onUpdateQty }: CartListProps) {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // ★ 4. 'qty' を 'quantity' に変更
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
   const total = Math.round(subtotal * (1 + TAX_RATE));
 
   return (
@@ -25,7 +35,9 @@ export default function CartList({ items, onUpdateQty }: CartListProps) {
       </h3>
       <div className="max-h-48 overflow-y-auto pr-2">
         {items.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">商品をスキャンしてください</p>
+          <p className="text-gray-500 text-center py-4">
+            商品をスキャンしてください
+          </p>
         ) : (
           <ul className="text-sm space-y-3">
             {items.map((item) => (
@@ -41,19 +53,28 @@ export default function CartList({ items, onUpdateQty }: CartListProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-semibold w-16 text-right text-gray-800">
-                    {(item.price * item.qty).toLocaleString()}円
+                    {/* ★ 5. 'qty' を 'quantity' に変更 */}
+                    {(item.price * item.quantity).toLocaleString()}円
                   </span>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => onUpdateQty(item.product_id, item.qty - 1)}
+                      // ★ 6. 'qty' を 'quantity' に変更
+                      onClick={() =>
+                        onUpdateQty(item.product_id, item.quantity - 1)
+                      }
                       className="w-7 h-7 bg-gray-200 text-gray-700 rounded-full text-xl font-bold flex items-center justify-center hover:bg-gray-300 transition-colors"
                     >
                       -
                     </button>
-                    <span className="w-5 text-center font-medium">{item.qty}</span>
-                    {/* 👇 このプラスボタンが表示されるようになります */}
+                    {/* ★ 7. 'qty' を 'quantity' に変更 */}
+                    <span className="w-5 text-center font-medium">
+                      {item.quantity}
+                    </span>
                     <button
-                      onClick={() => onUpdateQty(item.product_id, item.qty + 1)}
+                      // ★ 8. 'qty' を 'quantity' に変更
+                      onClick={() =>
+                        onUpdateQty(item.product_id, item.quantity + 1)
+                      }
                       className="w-7 h-7 bg-blue-500 text-white rounded-full text-xl font-bold flex items-center justify-center hover:bg-blue-600 transition-colors"
                     >
                       +
@@ -74,8 +95,7 @@ export default function CartList({ items, onUpdateQty }: CartListProps) {
             </span>
           </p>
           <p className="text-lg font-bold text-gray-800">
-            税込合計:{" "}
-            <span className="text-blue-600">{total.toLocaleString()}円</span>
+            税込合計: <span className="text-blue-600">{total.toLocaleString()}円</span>
           </p>
         </div>
       )}
