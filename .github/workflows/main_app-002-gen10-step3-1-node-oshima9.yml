@@ -1,5 +1,6 @@
 name: Build and deploy Next.js to Azure Web App (manual zip)
 
+
 on:
   push:
     branches:
@@ -54,3 +55,4 @@ jobs:
           app-name: 'app-002-gen10-step3-1-node-oshima9'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_90811EC78F864A0BAB9B9D7BEDD6FE2F }}
           package: ./deploy
+
