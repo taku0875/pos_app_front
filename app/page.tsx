@@ -64,7 +64,7 @@ export default function Page() {
 
       // カートに追加
       addToCart({
-        product_id: productData.prd_id,
+        product_id: productData.prd_id, // ✅ product_idを格納
         product_code: productData.code,
         name: productData.name,
         price: productData.price,
@@ -97,6 +97,7 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             items: cart.map((item) => ({
+              product_id: item.product_id, // ✅ FastAPI側必須フィールド
               code: item.product_code,
               name: item.name,
               price: item.price,
